@@ -55,6 +55,6 @@ class Movies extends Migration
 
 	public function down()
 	{
-		$forge->dropTable('movies');
+		$this->forge->dropTable('movies');
 	}
 }
