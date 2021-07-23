@@ -14,7 +14,19 @@ class Movie extends Model
 	protected $returnType           = 'App\Entities\Movie';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['title,country,year,page_url,premier_date,vod,director,actors,imdb,duraction,description'];
+	protected $allowedFields        = [
+		'title',
+		'country',
+		'year',
+		'page_url',
+		'premier_date',
+		'vod',
+		'director',
+		'actors',
+		'imdb',
+		'duraction',
+		'description'
+	];
 
 	// Dates
 	protected $useTimestamps        = false;

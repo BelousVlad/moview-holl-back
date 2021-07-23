@@ -13,26 +13,34 @@ class XML extends BaseController
 
 	public function gen_database()
 	{
-		// echo 123;
-		// var_dump();
-		// var_dump($this->addGenreIfNoExist('Мелодрамы'));
+		$movie_model = model('App\Models\Movie');
+		$movie_category_model = model('App\Models\MovieCategory');
+		$movie_genre_model = model('App\Models\MovieGenre');
 
 		$xml = simplexml_load_file(ROOTPATH.'app/Controllers/movies.xml');
 
-		// var_dump($xml);
+		$movie_genre_model->emptyTable();
+		$movie_category_model->emptyTable();
+		$movie_model->emptyTable();
 
 		foreach($xml->object as $object)
 		{
+			$info = $object->info;
+			// dd($object);
+			$year = $info['year'];
+			$country = $info['country'];
+			$premier_date = $info['premiere'];
 			// var_dump($object);
 			// $attr = 'attributes';
 			$title = $object['title'];
 			$mgg_id = $object['id'];
 			$page_url = $object['page'];
 			$vod = $object['vod'];
-			$premier_date = $object['premier'];
-			$imdb = $object['imdb'];
-			$duraction = $object['duraction'];
-			$description = $object['description'];
+			$imdb = $object->ratings['imdb'];
+			
+			$duraction = $object->duration_sec;
+			// dd($object);
+			$description = $object->story;
 			$tmp = 'gallery-image';
 			// var_dump($object);
 			$gallery = $object->$tmp;
@@ -73,13 +81,47 @@ class XML extends BaseController
 			$gallery_arr = array();
 			foreach($gallery as $image)
 			{
-				// var_dump($image);
 				array_push($gallery_arr, $image['url']);
-				// echo $image	['url'].'<br>';
 			}
-			// echo '<br>';
-			// var_dump($gallery_arr);
 
+			$movie = new \App\Entities\Movie();
+
+			$movie->title = $title;
+			$movie->country = $country;
+			$movie->year = $year;
+			$movie->page_url = $page_url;
+			$movie->premier_date = $premier_date;
+			$movie->director = $directors_str;
+			$movie->actors = $actors_str;
+			$movie->imdb = $imdb;
+			$movie->duraction = $duraction;
+			$movie->description = $description;
+			$movie->vod = $vod;
+
+			// dd($movie);
+
+			$movie_model->save($movie);
+			$movie_id = $movie_model->insertID;
+
+			// var_dump($movie_id);
+
+			foreach($genres_ids as $id)
+			{
+				$arr = [
+					'movie_id' => $movie_id,
+					'genre_id' => $id
+				];
+				// var_dump($arr);
+				$movie_genre_model->save($arr);
+			}
+
+			foreach($categories_ids as $id)
+			{
+				$movie_category_model->save([
+					'movie_id' => $movie_id,
+					'category_id' => $id
+				]);
+			}
 		}
 	}
 

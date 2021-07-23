@@ -14,7 +14,7 @@ class MovieGenre extends Model
 	protected $returnType           = 'object';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['movie_id, genre_id'];
+	protected $allowedFields        = ['movie_id', 'genre_id'];
 
 	// Dates
 	protected $useTimestamps        = false;
