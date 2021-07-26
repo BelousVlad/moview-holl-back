@@ -17,7 +17,7 @@ class XML extends BaseController
 		$movie_category_model = model('App\Models\MovieCategory');
 		$movie_genre_model = model('App\Models\MovieGenre');
 
-		$xml = simplexml_load_file(ROOTPATH.'app/Controllers/movies.xml');
+		$xml = simplexml_load_file('http://xml.megogo.net/assets/files/ua/advod_embed_mgg.xml');
 
 		$movie_genre_model->emptyTable();
 		$movie_category_model->emptyTable();
@@ -49,6 +49,9 @@ class XML extends BaseController
 			$categories = $object['categories'];
 			$directors = $object->directors;
 			$directors_str = '';
+
+			if(stripos($categories,'Передачи и шоу') !== false)
+				continue;
 			
 			foreach($directors as $director)
 			{
@@ -78,6 +81,7 @@ class XML extends BaseController
 			{
 				array_push($categories_ids, $this->addCategoryIfNoExist($categorie_title));
 			}
+
 			$gallery_arr = array();
 			foreach($gallery as $image)
 			{
