@@ -12,7 +12,7 @@ class Home extends BaseController
 
 		$genres = $model->findAll();
 
-		var_dump($genres[0]->categories);
+		var_dump($genres);
 
 		// $genre->title = 'new_title2';
 

@@ -61,7 +61,7 @@ class Movie extends Model
 		foreach($data as $movie)
 		{
 			// var_dump($movie);
-			$relations = $genre_movie->where('movie_id', $movie->id)->findAll();
+			$relations = $genre_movie->where('movie_id', $movie->movie_id)->findAll();
 			$genres_arr = array();
 			foreach($relations as $relation)
 			{
@@ -82,7 +82,7 @@ class Movie extends Model
 		foreach($data as $movie)
 		{
 			// var_dump($movie);
-			$relations = $category_movie->where('movie_id', $movie->id)->findAll();
+			$relations = $category_movie->where('movie_id', $movie->movie_id)->findAll();
 			$categories_arr = array();
 			foreach($relations as $relation)
 			{
@@ -94,9 +94,24 @@ class Movie extends Model
 		return $data;
 	}
 
-	public function findAll(int $limit = 0, int $offset = 0)
+	public function findAll(int $limit = 10, int $offset = 0, $genre = null, $category = null)
 	{
-		$data = parent::findAll($limit, $offset);
+		if($category)
+		{
+			$this->join('movie_category', 'movie_category.movie_id = movies.movie_id');
+
+			$this->where("movie_category.category_id = $category");
+		}
+
+		if($genre)
+		{
+			$this->join('movie_genre', 'movie_genre.movie_id = movies.movie_id');
+
+			$this->where("movie_genre.genre_id = $genre");
+		}
+
+		$data = $this->get($limit, $offset)->getResult();
+		// dd($data);
 		$data = $this->categoryRelation($data);
 		return $this->genreRelation($data);
 	}

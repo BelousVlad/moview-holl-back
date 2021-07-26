@@ -34,6 +34,10 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->get('/xml', 'XML::gen_database');
+$routes->get('/api/movies', 'Api::movie');
+$routes->get('/api/movies/(:num)', 'Api::movie/$1');
+$routes->get('/api', 'Api::movies');
+$routes->get('/api/categories', 'Api::categories');
 
 /*
  * --------------------------------------------------------------------
