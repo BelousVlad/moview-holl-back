@@ -17,7 +17,7 @@ class XML extends BaseController
 		$movie_category_model = model('App\Models\MovieCategory');
 		$movie_genre_model = model('App\Models\MovieGenre');
 
-		$xml = simplexml_load_file('http://xml.megogo.net/assets/files/ua/advod_embed_mgg.xml');
+		$xml = simplexml_load_file('http://xml.megogo.net/assets/files/ua/all_embed_mgg.xml');
 
 		$movie_genre_model->emptyTable();
 		$movie_category_model->emptyTable();
@@ -27,6 +27,10 @@ class XML extends BaseController
 		{
 			$info = $object->info;
 			// dd($object);
+			$id = trim($object['id']);
+			// echo $id;
+			// // var_dump($id);
+			// echo '<br>';
 			$year = $info['year'];
 			$country = $info['country'];
 			$premier_date = $info['premiere'];
@@ -37,6 +41,9 @@ class XML extends BaseController
 			$page_url = $object['page'];
 			$vod = $object['vod'];
 			$imdb = $object->ratings['imdb'];
+
+			$poster_obj = $object->poster;
+			$poster = $poster_obj['url'];
 			
 			$duraction = $object->duration_sec;
 			// dd($object);
@@ -71,7 +78,7 @@ class XML extends BaseController
 			$genres_ids = array();
 			foreach($genres_arr as $genre_title)
 			{
-				array_push($genres_ids, $this->addGenreIfNoExist($genre_title));
+				array_push($genres_ids, $this->addGenreIfNoExist(trim($genre_title)));
 			}
 
 			$categories_arr = explode(',', $categories);
@@ -79,7 +86,7 @@ class XML extends BaseController
 			$categories_ids = array();
 			foreach($categories_arr as $categorie_title)
 			{
-				array_push($categories_ids, $this->addCategoryIfNoExist($categorie_title));
+				array_push($categories_ids, $this->addCategoryIfNoExist(trim($categorie_title)));
 			}
 
 			$gallery_arr = array();
@@ -90,6 +97,7 @@ class XML extends BaseController
 
 			$movie = new \App\Entities\Movie();
 
+			$movie->megogo_id = $id;
 			$movie->title = $title;
 			$movie->country = $country;
 			$movie->year = $year;
@@ -101,13 +109,12 @@ class XML extends BaseController
 			$movie->duraction = $duraction;
 			$movie->description = $description;
 			$movie->vod = $vod;
+			$movie->poster = $poster;
 
 			// dd($movie);
 
 			$movie_model->save($movie);
 			$movie_id = $movie_model->insertID;
-
-			// var_dump($movie_id);
 
 			foreach($genres_ids as $id)
 			{

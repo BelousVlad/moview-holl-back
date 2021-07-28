@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 
 class Api extends BaseController
 {
+
 	public function index()
 	{
 		echo 123;
@@ -26,15 +27,24 @@ class Api extends BaseController
 			$limit = $request->getGet('limit') ?? 10;
 			$offset = $request->getGet('offset') ?? 0;
 
+
 			$category = $request->getGet('category');
 			$genre = $request->getGet('genre');
-
-			// var_dump($query->getCompiledSelect());
-			$movies = $movie_model->findAll($limit, $offset, $genre, $category);
+			$order_by = $request->getGet('order_by');
+			if ($order_by)
+				$order_by = $this->getAppropriateMovieField($order_by);
+			$movies = $movie_model->findAll($limit, $offset, $genre, $category, $order_by);
 			// var_dump($movies);
 		}
 		return $this->response->setJSON($movies);
 		// var_dump($movies);
+	}
+
+	private function getAppropriateMovieField($field)
+	{
+		if($field == 'id')
+			return 'megogo_id';
+		return $field; 
 	}
 
 	public function categories()
@@ -44,5 +54,13 @@ class Api extends BaseController
 		$categories = $model->findAll();
 
 		return $this->response->setJSON($categories);
+	}
+	public function genres()
+	{
+		$model = model('App\Models\Genre');
+
+		$genres = $model->findAll();
+
+		return $this->response->setJSON($genres);
 	}
 }

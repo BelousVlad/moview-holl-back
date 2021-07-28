@@ -8,6 +8,7 @@ class Movie extends Entity
 {
 	protected $datamap = [
 		'id' => 			'movie_id',
+		'megogo_id' =>		'megogo_id',
 		'title' => 			'title',
 		'country' => 		'country',
 		'year' => 			'year',
@@ -18,7 +19,8 @@ class Movie extends Entity
 		'actors' => 		'actors',
 		'imdb' => 			'imdb',
 		'duraction' => 		'duraction',
-		'description' => 	'description'
+		'description' => 	'description',
+		'poster' =>		 	'poster',
 	];
 	protected $dates   = [
 		'created_at',

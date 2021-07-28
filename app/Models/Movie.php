@@ -15,6 +15,7 @@ class Movie extends Model
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
 	protected $allowedFields        = [
+		'megogo_id',
 		'title',
 		'country',
 		'year',
@@ -25,7 +26,8 @@ class Movie extends Model
 		'actors',
 		'imdb',
 		'duraction',
-		'description'
+		'description',
+		'poster',
 	];
 
 	// Dates
@@ -94,7 +96,7 @@ class Movie extends Model
 		return $data;
 	}
 
-	public function findAll(int $limit = 10, int $offset = 0, $genre = null, $category = null)
+	public function findAll(int $limit = 10, int $offset = 0, $genre = null, $category = null, $order_by = null)
 	{
 		if($category)
 		{
@@ -110,8 +112,13 @@ class Movie extends Model
 			$this->where("movie_genre.genre_id = $genre");
 		}
 
+		if($order_by)
+		{
+			$this->orderBy($order_by);
+			// dd($this);
+		}
+
 		$data = $this->get($limit, $offset)->getResult();
-		// dd($data);
 		$data = $this->categoryRelation($data);
 		return $this->genreRelation($data);
 	}
