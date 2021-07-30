@@ -3,39 +3,81 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use DateTime;
+use DateTimeZone;
 
 class XML extends BaseController
 {
 	public function index()
 	{
-		echo 321;
+		
 	}
+
+	private $en_months = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	];
+	private $ru_months = [
+		'января',
+		'февраля',
+		'марта',
+		'апреля',
+		'мая',
+		'июня',
+		'июля',
+		'августа',
+		'сентября',
+		'октября',
+		'ноября',
+		'декабря',
+	];
 
 	public function gen_database()
 	{
 		$movie_model = model('App\Models\Movie');
 		$movie_category_model = model('App\Models\MovieCategory');
 		$movie_genre_model = model('App\Models\MovieGenre');
+		$movie_gallery = model('App\Models\Gallery');
 
 		$xml = simplexml_load_file('http://xml.megogo.net/assets/files/ua/all_embed_mgg.xml');
 
 		$movie_genre_model->emptyTable();
 		$movie_category_model->emptyTable();
+		$movie_gallery->emptyTable();
 		$movie_model->emptyTable();
+
+		// echo(date_create_from_format("j F Y",'9 сентября 2009', DateTimeZone::EUROPE) . "<br>");
+
+		// $limit = 50;
 
 		foreach($xml->object as $object)
 		{
 			$info = $object->info;
-			// dd($object);
 			$id = trim($object['id']);
-			// echo $id;
-			// // var_dump($id);
-			// echo '<br>';
+			
 			$year = $info['year'];
 			$country = $info['country'];
+
 			$premier_date = $info['premiere'];
-			// var_dump($object);
-			// $attr = 'attributes';
+			$premier_date = str_ireplace($this->ru_months, $this->en_months, $premier_date);
+			
+			$premier_date = DateTime::createFromFormat("j F Y", $premier_date, new DateTimeZone('Europe/Kiev'));
+			
+			if($premier_date === false)
+				$premier_date = null;
+			else
+				$premier_date = $date = date('Y-m-d', $premier_date->getTimestamp());
+
 			$title = $object['title'];
 			$mgg_id = $object['id'];
 			$page_url = $object['page'];
@@ -43,13 +85,11 @@ class XML extends BaseController
 			$imdb = $object->ratings['imdb'];
 
 			$poster_obj = $object->poster;
-			$poster = $poster_obj['url'];
+			$poster = $poster_obj['thumbnail'];
 			
 			$duraction = $object->duration_sec;
-			// dd($object);
 			$description = $object->story;
 			$tmp = 'gallery-image';
-			// var_dump($object);
 			$gallery = $object->$tmp;
 			
 			$genres = $object['genres'];
@@ -122,7 +162,6 @@ class XML extends BaseController
 					'movie_id' => $movie_id,
 					'genre_id' => $id
 				];
-				// var_dump($arr);
 				$movie_genre_model->save($arr);
 			}
 
@@ -133,6 +172,17 @@ class XML extends BaseController
 					'category_id' => $id
 				]);
 			}
+
+			foreach($gallery_arr as $url)
+			{
+				$movie_gallery->save([
+					'movie_id' => $movie_id,
+					'gallery_img' => $url
+				]);
+			}
+
+			// if(--$limit <= 0)
+			// 	break;
 		}
 	}
 

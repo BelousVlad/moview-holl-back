@@ -96,6 +96,25 @@ class Movie extends Model
 		return $data;
 	}
 
+	protected function galleryRelation(array $data)
+	{
+		$gallery = model('App\Model\Gallery');
+
+		foreach($data as $movie)
+		{
+			// var_dump($movie);
+			$relations = $gallery->where('movie_id', $movie->movie_id)->findAll();
+			$gallery_arr = array();
+			foreach($relations as $relation)
+			{
+				$img = $relation->gallery_img;
+				array_push($gallery_arr, $img);
+			}
+			$movie->gallery = $gallery_arr;
+		}
+		return $data;
+	}
+
 	public function findAll(int $limit = 10, int $offset = 0, $genre = null, $category = null, $order_by = null)
 	{
 		if($category)
@@ -114,12 +133,22 @@ class Movie extends Model
 
 		if($order_by)
 		{
-			$this->orderBy($order_by);
-			// dd($this);
+			$this->orderBy($order_by, 'DESC');
 		}
 
 		$data = $this->get($limit, $offset)->getResult();
 		$data = $this->categoryRelation($data);
-		return $this->genreRelation($data);
+		$data = $this->genreRelation($data);
+		return $data;
+	}
+
+	public function find($id = null)
+	{
+		$movie = parent::find($id);
+		$movie = $this->categoryRelation([$movie]);
+		$movie = $this->genreRelation($movie);
+		$movie = $this->galleryRelation($movie);
+
+		return $movie[0];
 	}
 }
