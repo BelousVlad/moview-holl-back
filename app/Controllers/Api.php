@@ -46,6 +46,12 @@ class Api extends BaseController
 			return 'megogo_id';
 		return $field; 
 	}
+	private function getAppropriateGenreField($field)
+	{
+		if($field == 'id')
+			return 'genre_id';
+		return $field; 
+	}
 
 	public function categories()
 	{
@@ -55,11 +61,18 @@ class Api extends BaseController
 
 		return $this->response->setJSON($categories);
 	}
-	public function genres()
+	public function genres($needly = null, $field = 'id')
 	{
 		$model = model('App\Models\Genre');
-
-		$genres = $model->findAll();
+		if($needly)
+		{
+			$field = $this->getAppropriateGenreField($field);
+			$genres = $model->find($needly, $field);
+		}
+		else
+		{
+			$genres = $model->findAll();
+		}
 
 		return $this->response->setJSON($genres);
 	}

@@ -39,4 +39,13 @@ class Genre extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+	public function find($needly = null, $field = 'genre_id')
+	{
+		$genre = $this->where($field, $needly)->findAll();
+
+		return $genre[0] ?? null;
+	}
+
+
 }

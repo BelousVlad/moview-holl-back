@@ -38,6 +38,8 @@ $routes->get('/api/movies', 'Api::movie');
 $routes->get('/api/movies/(:num)', 'Api::movie/$1');
 $routes->get('/api', 'Api::movies');
 $routes->get('/api/categories', 'Api::categories');
+$routes->get('/api/genres/(:num)', 'Api::genres/$1');
+$routes->get('/api/genres/(:alpha)/(:segment)', 'Api::genres/$2/$1');
 $routes->get('/api/genres', 'Api::genres');
 
 /*
