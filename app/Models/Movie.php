@@ -115,8 +115,18 @@ class Movie extends Model
 		return $data;
 	}
 
-	public function findAll(int $limit = 10, int $offset = 0, $genre = null, $category = null, $order_by = null)
+	public function findAll(int $limit = 10, int $offset = 0, $title = null, $vod = null , $genre = null, $category = null, $order_by = null)
 	{
+		if($title)
+		{
+			$this->like('title', $title);
+		}
+
+		if ($vod)
+		{
+			$this->whereIn('vod', $vod);
+		}
+
 		if($category)
 		{
 			$this->join('movie_category', 'movie_category.movie_id = movies.movie_id');

@@ -29,11 +29,15 @@ class Api extends BaseController
 
 
 			$category = $request->getGet('category');
+			$vod = $request->getGet('vod');
+			if($vod)
+				$vod = explode(',', $vod);
 			$genre = $request->getGet('genre');
 			$order_by = $request->getGet('order_by');
+			$title = $request->getGet('title');
 			if ($order_by)
 				$order_by = $this->getAppropriateMovieField($order_by);
-			$movies = $movie_model->findAll($limit, $offset, $genre, $category, $order_by);
+			$movies = $movie_model->findAll($limit, $offset, $title, $vod, $genre, $category, $order_by);
 			// var_dump($movies);
 		}
 		return $this->response->setJSON($movies);
