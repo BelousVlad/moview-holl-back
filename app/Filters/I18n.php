@@ -25,7 +25,7 @@ class I18n implements FilterInterface
 	 */
 	public function before(RequestInterface $request, $arguments = null)
 	{
-		dd($request->getLocale());
+		// dd($request->getLocale());
 		// echo '<br>';
 		// echo '<br>';
 		// echo '<br>';

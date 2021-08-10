@@ -180,9 +180,6 @@ class XML extends BaseController
 					'gallery_img' => $url
 				]);
 			}
-
-			// if(--$limit <= 0)
-			// 	break;
 		}
 	}
 
@@ -216,5 +213,66 @@ class XML extends BaseController
 
 		$category_model->save($category);
 		return $category_model->insertID;
+	}
+
+	public function parse_ua_movies()
+	{
+		$movie_model = model('App\Models\Movie');
+		$localization_model = model('App\Models\Localization');
+
+		$localization_model->clear('ua');
+
+		$xml = simplexml_load_file('http://xml.megogo.net/assets/files/ua/all_mgg_ua.xml');
+
+		$i = 100;
+
+		foreach($xml->object as $object)
+		{
+			$info = $object->info;
+			$id = trim($object['id']);
+			
+			$country = $info['country'];
+			$title = $object['title'];
+			$description = $object->story;
+			$page_url = $object['page'];
+			
+			$genres = $object['genres'];
+			$directors = $object->directors;
+			$directors_str = '';
+			
+			foreach($directors as $director)
+			{
+				$directors_str.= $director->director.' ,';
+			}
+
+			$actors = $object->actors;
+			$actors_str = '';
+			
+			foreach($actors as $actor)
+			{
+				$actors_str.= $actor->actor.' ,';
+			}
+
+			$movie = $movie_model
+				->where('megogo_id', $id)
+				->first();
+			
+			$data = array(
+				'title' => $title,
+				'country' => $country,
+				'page_url' => $page_url,
+				'director' => $directors_str,
+				'actors' => $actors_str,
+				'description' => $description,	
+			);
+			// var_dump($movie->id);
+			$res = $localization_model->setMovieLocalization($movie->id, 'ua', $data);
+			// var_dump($res);
+
+			if(!--$i)
+				break;
+		}
+
+		
 	}
 }
