@@ -32,15 +32,18 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
-$routes->get('/xml', 'XML::gen_database');
-$routes->get('/api/movies', 'Api::movie');
-$routes->get('/api/movies/(:num)', 'Api::movie/$1');
-$routes->get('/api', 'Api::movies');
-$routes->get('/api/categories', 'Api::categories');
-$routes->get('/api/genres/(:num)', 'Api::genres/$1');
-$routes->get('/api/genres/(:alpha)/(:segment)', 'Api::genres/$2/$1');
-$routes->get('/api/genres', 'Api::genres');
+
+$routes->group('{locale}', ['filter' => 'i18n:$1'] ,function($routes) {
+	$routes->get('api/movies/(:num)', 'Api::movie/$2');
+	$routes->get('api/movies', 'Api::movie');
+	$routes->get('api/categories', 'Api::categories');
+	$routes->get('api/genres/(:num)', 'Api::genres/$2');
+	$routes->get('api/genres/(:alpha)/(:segment)', 'Api::genres/$3/$2');
+	$routes->get('api/genres', 'Api::genres');
+	$routes->get('api', 'Api::movies');
+	$routes->get('*', 'Home::index');
+});
+$routes->get('xml', 'XML::gen_database');
 
 /*
  * --------------------------------------------------------------------

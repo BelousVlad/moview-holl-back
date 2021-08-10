@@ -10,9 +10,9 @@ class Home extends BaseController
 
 		// $model->save(array('title' => 'test_title'));
 
-		$genres = $model->findAll();
+		// $genres = $model->findAll();
 
-		var_dump($genres);
+		// var_dump($genres);
 
 		// $genre->title = 'new_title2';
 
