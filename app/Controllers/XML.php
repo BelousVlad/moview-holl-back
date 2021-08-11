@@ -181,6 +181,8 @@ class XML extends BaseController
 				]);
 			}
 		}
+
+		$this->parse_ua_movies();
 	}
 
 	private function addGenreIfNoExist($title)
@@ -220,11 +222,11 @@ class XML extends BaseController
 		$movie_model = model('App\Models\Movie');
 		$localization_model = model('App\Models\Localization');
 
-		$localization_model->clear('ua');
+		$localization_model->clear('uk');
 
 		$xml = simplexml_load_file('http://xml.megogo.net/assets/files/ua/all_mgg_ua.xml');
 
-		$i = 100;
+		// $i = 100;
 
 		foreach($xml->object as $object)
 		{
@@ -256,23 +258,21 @@ class XML extends BaseController
 			$movie = $movie_model
 				->where('megogo_id', $id)
 				->first();
+
+			if ($movie)
+			{
+				$data = array(
+					'title' => $title,
+					'country' => $country,
+					'page_url' => $page_url,
+					'director' => $directors_str,
+					'actors' => $actors_str,
+					'description' => $description,	
+				);
+				
+				$res = $localization_model->setMovieLocalization($movie->id, 'uk', $data);
+			}
 			
-			$data = array(
-				'title' => $title,
-				'country' => $country,
-				'page_url' => $page_url,
-				'director' => $directors_str,
-				'actors' => $actors_str,
-				'description' => $description,	
-			);
-			// var_dump($movie->id);
-			$res = $localization_model->setMovieLocalization($movie->id, 'ua', $data);
-			// var_dump($res);
-
-			if(!--$i)
-				break;
 		}
-
-		
 	}
 }

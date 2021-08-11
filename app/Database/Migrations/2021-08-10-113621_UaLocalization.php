@@ -34,7 +34,7 @@ class UaLocalization extends Migration
 		
 		$this->forge->addPrimaryKey('movie_id');
 		$this->forge->addForeignKey('movie_id', 'movies', 'movie_id', 'CASCADE', 'CASCADE');
-		$this->forge->createTable('localization_ua_movies');
+		$this->forge->createTable('localization_uk_movies');
 	}
 
 	public function down()

@@ -33,6 +33,8 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
+$routes->get('xml/parse_ua_movies', 'XML::parse_ua_movies');
+$routes->get('xml', 'XML::gen_database');
 $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
 	$routes->get('api/movies/(:num)', 'Api::movie/$1');
 	$routes->get('api/movies', 'Api::movie');
@@ -43,8 +45,6 @@ $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
 	$routes->get('api', 'Api::movies');
 	$routes->get('*', 'Home::index');
 });
-$routes->get('xml/parse_ua_movies', 'XML::parse_ua_movies');
-$routes->get('xml', 'XML::gen_database');
 
 /*
  * --------------------------------------------------------------------
@@ -55,7 +55,7 @@ $routes->get('xml', 'XML::gen_database');
  * need it to be able to override any defaults in this file. Environment
  * based routes is one such time. require() additional route files here
  * to make that happen.
- *
+ *	
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */

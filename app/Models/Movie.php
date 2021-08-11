@@ -53,8 +53,8 @@ class Movie extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
-
-	protected function genreRelation(array $data)
+	
+	public function genreRelation(array $data)
 	{
 		// var_dump($data);
 		$genre_movie = model('App\Model\MovieGenre');
