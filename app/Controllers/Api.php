@@ -100,15 +100,17 @@ class Api extends BaseController
 		{
 			$field = $this->getAppropriateGenreField($field);
 			$genres = $model->find($needly, $field);
-			$genres->title = $localization_model->localizeGenre($genres->title);
+			if ($localization_model)
+				$genres->title = $localization_model->localizeGenre($genres->title);
 		}
 		else
 		{
 			$genres = $model->findAll();
-			foreach($genres as $genre)
-			{
-				$genre->title = $localization_model->localizeGenre($genre->title);
-			}
+			if ($localization_model)
+				foreach($genres as $genre)
+				{
+					$genre->title = $localization_model->localizeGenre($genre->title);
+				}
 		}
 
 		return $this->response->setJSON($genres);
