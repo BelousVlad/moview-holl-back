@@ -115,6 +115,68 @@ class Api extends BaseController
 
 		return $this->response->setJSON($genres);
 	}
+
+	public function add_slide()
+	{
+
+		var_dump($_SERVER['REMOTE_ADDR']);
+
+		$title = $this->request->getPost('title');
+		$note = $this->request->getPost('note');
+		$link = $this->request->getPost('link');
+		$link_text = $this->request->getPost('link_text');
+
+		$model_slider = model('App\Models\Slides');
+
+		var_dump($title);
+		var_dump($note);
+		var_dump($link);
+		var_dump($link_text);
+
+		// $model_slider->save([
+		// 	'title' => $title,
+		// 	'note' => $note,
+		// 	'link' => $link,
+		// 	'link_text' => $link_text,
+		// ]);
+	}
+
+	public function get_slides()
+	{
+		$model = model('App\Models\Slides');
+
+		$items = $model->findAll();
+
+		return $this->response->setJSON($items);
+	}
+
+	public function save_slide()
+	{
+		var_dump($_SERVER['REMOTE_ADDR']);
+
+		$id = $this->request->getPost('id');
+		$title = $this->request->getPost('title');
+		$note = $this->request->getPost('note');
+		$link = $this->request->getPost('link');
+		$link_text = $this->request->getPost('link_text');
+
+		$model_slider = model('App\Models\Slides');
+
+		var_dump($id);
+		var_dump($title);
+		var_dump($note);
+		var_dump($link);
+		var_dump($link_text);
+
+		// $model_slider->save([
+		// 	'id' => $id
+		// 	'title' => $title,
+		// 	'note' => $note,
+		// 	'link' => $link,
+		// 	'link_text' => $link_text,
+		// ]);
+	}
+
 	private function setMovieLocale(&$movie, $locale)
 	{
 		$movie->title = 		$locale->title;

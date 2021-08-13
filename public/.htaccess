@@ -12,6 +12,7 @@ Header always add Access-Control-Allow-Origin "*"
 Header always add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
 Header always add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
 
+
 # Turning on the rewrite engine is necessary for the following rules and features.
 # FollowSymLinks must be enabled for this to work.
 <IfModule mod_rewrite.c>
