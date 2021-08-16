@@ -64,6 +64,17 @@ class Api extends BaseController
 		return $this->response->setJSON($movies);
 	}
 
+	public function get_max()
+	{
+		$movies = model('App\Models\Movie');
+
+		$genre = $this->request->getGet('genre');
+		
+		$count = $movies->getCount($genre);
+
+		return $this->response->setJSON($count);
+	}
+
 	private function getAppropriateMovieField($field)
 	{
 		if($field == 'id')

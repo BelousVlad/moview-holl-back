@@ -161,4 +161,14 @@ class Movie extends Model
 
 		return $movie[0];
 	}
+
+	public function getCount($genre_id = null)
+	{
+		if($genre_id)
+		{
+			$this->join('movie_genre', 'movie_genre.movie_id = movies.movie_id'); 
+			$this->where('genre_id', $genre_id);
+		}
+		return $this->selectCount('movies.movie_id')->get()->getRow()->movie_id;
+	}
 }
