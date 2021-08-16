@@ -47,8 +47,8 @@ $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
 	$routes->get('api/genres/(:num)', 'Api::genres/$1');
 	$routes->get('api/genres', 'Api::genres');
 	$routes->get('api', 'Api::movies');
-	$routes->get('*', 'Home::index');
 });
+$routes->get('.*', 'Home::index');
 
 /*
  * --------------------------------------------------------------------

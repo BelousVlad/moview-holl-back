@@ -6,7 +6,8 @@ class Home extends BaseController
 {
 	public function index()
 	{
-		$model = model('App\Models\Movie');
+		// $model = model('App\Models\Movie');
+		echo 123;
 
 		// $model->save(array('title' => 'test_title'));
 
