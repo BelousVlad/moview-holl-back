@@ -48,6 +48,8 @@ $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
 	$routes->get('api/genres', 'Api::genres');
 	$routes->get('api', 'Api::movies');
 });
+$routes->post('slider/login', 'Login::login');
+$routes->get('slider/is_login', 'Login::isLogin');
 $routes->get('.*', 'Home::index');
 
 /*

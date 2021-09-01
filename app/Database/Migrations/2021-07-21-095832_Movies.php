@@ -14,6 +14,13 @@ class Movies extends Migration
 				'type' => 'INT',
 				'auto_increment' => TRUE
 			],
+			'megogo_id' => [
+				'type' => 'INT',
+				'unique' => true,
+			],
+			'title' => [
+				'type' => 'varchar(256)',
+			],
 			'title' => [
 				'type' => 'varchar(256)',
 			],
