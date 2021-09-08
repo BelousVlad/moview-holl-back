@@ -28,6 +28,10 @@ class Slider extends Migration
 			'link_text' => [
 				'type' => 'varchar(256)',
 				'null' => TRUE,
+			],
+			'image' => [
+				'type' => 'varchar(256)',
+				'null' => TRUE,
 			]
 		]);
 

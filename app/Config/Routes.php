@@ -35,8 +35,6 @@ $routes->setAutoRoute(true);
 
 $routes->get('xml/parse_ua_movies', 'XML::parse_ua_movies');
 $routes->get('xml', 'XML::gen_database');
-$routes->post('api/add_slide', 'Api::add_slide');
-$routes->get('api/get_slides', 'Api::get_slides');
 // $routes->get('api/get_max/(:alpha)', 'Api::get_max/$1');
 $routes->get('api/get_max', 'Api::get_max');
 $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
@@ -48,8 +46,12 @@ $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
 	$routes->get('api/genres', 'Api::genres');
 	$routes->get('api', 'Api::movies');
 });
+$routes->get('slider/image_slide/(:any)', 'Api::image_slide/$1');
+$routes->post('slider/add_slide', 'Api::add_slide');
+$routes->post('slider/save_slide', 'Api::save_slide');
+$routes->get ('slider/get_slides', 'Api::get_slides');
 $routes->post('slider/login', 'Login::login');
-$routes->get('slider/is_login', 'Login::isLogin');
+$routes->get ('slider/is_login', 'Login::isLogin');
 $routes->get('.*', 'Home::index');
 
 /*

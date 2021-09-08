@@ -19,6 +19,7 @@ class Slides extends Model
 		'note',
 		'link',
 		'link_text',
+		'image',
 	];
 
 	// Dates

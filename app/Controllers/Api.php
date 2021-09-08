@@ -163,29 +163,27 @@ class Api extends BaseController
 
 	public function save_slide()
 	{
-		var_dump($_SERVER['REMOTE_ADDR']);
-
-		$id = $this->request->getPost('id');
-		$title = $this->request->getPost('title');
-		$note = $this->request->getPost('note');
-		$link = $this->request->getPost('link');
-		$link_text = $this->request->getPost('link_text');
-
 		$model_slider = model('App\Models\Slides');
 
-		var_dump($id);
-		var_dump($title);
-		var_dump($note);
-		var_dump($link);
-		var_dump($link_text);
+		$slide = json_decode($this->request->getPost('slide'));
+		$image = $this->request->getFile('image');
+		if($image->isValid()) {
+			$new_name = $image->getRandomName();
+			$image->move(WRITEPATH.'uploads/slides', $new_name);
+			$slide->image = $new_name;
+		}
 
-		// $model_slider->save([
-		// 	'id' => $id
-		// 	'title' => $title,
-		// 	'note' => $note,
-		// 	'link' => $link,
-		// 	'link_text' => $link_text,
-		// ]);
+		$res = $model_slider->save($slide);
+
+		return $this->response->setJSON([
+			'ok' => $res
+		]);
+	}
+
+	public function image_slide($img) {
+		// var_dump(WRITEPATH.'uploads/slides/'.$img);
+		// dd($this->response);
+		return $this->response->download(WRITEPATH.'uploads/slides/'.$img, null, true);
 	}
 
 	private function setMovieLocale(&$movie, $locale)
