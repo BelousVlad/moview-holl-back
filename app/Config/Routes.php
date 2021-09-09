@@ -47,7 +47,7 @@ $routes->group('{locale}', ['filter' => 'i18n'] ,function($routes) {
 	$routes->get('api', 'Api::movies');
 });
 $routes->get('slider/image_slide/(:any)', 'Api::image_slide/$1');
-$routes->post('slider/add_slide', 'Api::add_slide');
+$routes->post('slider/remove_slide', 'Api::remove_slide');
 $routes->post('slider/save_slide', 'Api::save_slide');
 $routes->get ('slider/get_slides', 'Api::get_slides');
 $routes->post('slider/login', 'Login::login');
