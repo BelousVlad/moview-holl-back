@@ -140,6 +140,11 @@ class Api extends BaseController
 	{
 		$model_slider = model('App\Models\Slides');
 
+		$session = session();
+
+		if(!$session->admin)
+			return false;
+
 		$slide = json_decode($this->request->getPost('slide'));
 		$image = $this->request->getFile('image');
 		if($image && $image->isValid()) {
@@ -147,15 +152,14 @@ class Api extends BaseController
 			$image->move(WRITEPATH.'uploads/slides', $new_name);
 			$slide->image = $new_name;
 		}
-
-		// var_dump($slide);
-
+		
 		$res = $model_slider->save([
-			'title' => $slide->title,
-			'note' => $slide->note,
-			'link' => $slide->link,
-			'link_text' => $slide->link_text,
-			'slide_id' => $slide->slide_id,
+			'title' => $slide->title ?? null,
+			'note' => $slide->note ?? null,
+			'link' => $slide->link ?? null,
+			'link_text' => $slide->link_text ?? null,
+			'slide_id' => $slide->slide_id ?? null,
+			'image' => $slide->image ?? null,
 		]);
 
 		return $this->response->setJSON([
@@ -165,6 +169,11 @@ class Api extends BaseController
 
 	public function remove_slide() {
 		$model_slider = model('App\Models\Slides');
+
+		$session = session();
+
+		if(!$session->admin)
+			return false;
 		
 		$id = $this->request->getPost('slide_id');
 
